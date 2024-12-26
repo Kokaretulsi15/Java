@@ -1,0 +1,228 @@
+import java.util.Scanner;
+
+class User {
+    private String userName;
+    private int userId;
+    private String emailId;
+    private String password;
+    private Book[] newBooks;
+    private Book[] favourite;
+    private Book[] completed;
+
+    public User(String userName, int userId, String emailId, String password) {
+        this.userName = userName;
+        this.userId = userId;
+        this.emailId = emailId;
+        this.password = password;
+        this.newBooks = new Book[0];    // Initialize empty arrays
+        this.favourite = new Book[0];
+        this.completed = new Book[0];
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public String getEmailId() {
+        return emailId;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public Book[] getNewBooks() {
+        return newBooks;
+    }
+
+    public Book[] getFavourite() {
+        return favourite;
+    }
+
+    public Book[] getCompleted() {
+        return completed;
+    }
+
+    public void addBookToNewBooks(Book book) {
+        newBooks = addBookToArray(newBooks, book);
+    }
+
+    private Book[] addBookToArray(Book[] array, Book book) {
+        Book[] newArray = new Book[array.length + 1];
+        System.arraycopy(array, 0, newArray, 0, array.length);
+        newArray[array.length] = book;
+        return newArray;
+    }
+}
+
+class Book {
+    private String bookName;
+    private String authorName;
+    private String description;
+    private int bookId;
+
+    public Book(String bookName, String authorName, String description, int bookId) {
+        this.bookName = bookName;
+        this.authorName = authorName;
+        this.description = description;
+        this.bookId = bookId;
+    }
+
+    public String getBookName() {
+        return bookName;
+    }
+
+    public String getAuthorName() {
+        return authorName;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public int getBookId() {
+        return bookId;
+    }
+}
+
+class MagicOfBooks {
+    private static User[] users = new User[20];
+    private static int userCount = 0;
+    private static Book[] books = new Book[20];
+    private static int bookCount = 0;
+    private static Scanner sc = new Scanner(System.in);
+
+    public static void register() {
+        System.out.println("Enter UserName:");
+        String userName = sc.next();
+        System.out.println("Enter User ID:");
+        int userId = sc.nextInt();
+        System.out.println("Enter Password:");
+        String password = sc.next();
+        System.out.println("Enter EmailId:");
+        String emailId = sc.next();
+        users[userCount++] = new User(userName, userId, emailId, password);
+        System.out.println("Registration successful");
+    }
+
+    public static void login() {
+        System.out.println("Enter Username:");
+        String userName = sc.next();
+        System.out.println("Enter Password:");
+        String password=sc.next();
+        for (int i = 0; i < userCount; i++) {
+            if (users[i].getUserName().equals(userName) && (users[i].getPassword().equals(password))) {
+                System.out.println("Login successful!");
+                return;
+            }
+        }
+        System.out.println("Invalid username");
+    }
+
+    public static void addBook() {
+        System.out.println("Enter Book Name:");
+        String bookName = sc.next();
+        System.out.println("Enter Author Name:");
+        String authorName = sc.next();
+        System.out.println("Enter Book Description:");
+        String description = sc.next();
+        System.out.println("Enter Book ID:");
+        int bookId = sc.nextInt();
+        Book book = new Book(bookName, authorName, description, bookId);
+        books[bookCount++] = book;
+        System.out.println("Book added successfully");
+    }
+
+    public static void readBook() {
+        System.out.println("Enter the bookId to view details:");
+        int bookId = sc.nextInt();
+        for (int i = 0; i < bookCount; i++) {
+            if (books[i].getBookId() == bookId) {
+                System.out.println("Book Name: " + books[i].getBookName());
+                System.out.println("Author: " + books[i].getAuthorName());
+                System.out.println("Description: " + books[i].getDescription());
+                return;
+            }
+        }
+        System.out.println("Book not found");
+    }
+
+    public static void updateBook() {
+        System.out.println("Enter Book ID to update:");
+        int bookId = sc.nextInt();
+        for (int i = 0; i < bookCount; i++) {
+            if (books[i].getBookId() == bookId) {
+                System.out.println("Enter new Book Name:");
+                String bookName = sc.next();
+                System.out.println("Enter new Author Name:");
+                String authorName = sc.next();
+                System.out.println("Enter new Book Description:");
+                String description = sc.next();
+                books[i] = new Book(bookName, authorName, description, bookId);
+                System.out.println("Book updated successfully");
+                return;
+            }
+        }
+        System.out.println("Book not found");
+    }
+
+    public static void deleteBook() {
+        System.out.println("Enter Book ID to delete:");
+        int bookId = sc.nextInt();
+        for (int i = 0; i < bookCount; i++) {
+            if (books[i].getBookId() == bookId) {
+                for (int j = i; j < bookCount - 1; j++) {
+                    books[j] = books[j + 1];
+                }
+                bookCount--;
+                System.out.println("Book deleted successfully");
+                return;
+            }
+        }
+        System.out.println("Book not found");
+    }
+
+    public static void main(String[] args) {
+        int choice;
+        do {
+            System.out.println("Books Menu:");
+            System.out.println("1: Register");
+            System.out.println("2: Login");
+            System.out.println("3: Add Book");
+            System.out.println("4: Read Book Details");
+            System.out.println("5: Update Book Details");
+            System.out.println("6: Delete Book Details");
+            System.out.println("7: Exit");
+            System.out.println("Enter choice:");
+            choice = sc.nextInt();
+
+            switch (choice) {
+                case 1:
+                    register();
+                    break;
+                case 2:
+                    login();
+                    break;
+                case 3:
+                    addBook();
+                    break;
+                case 4:
+                    readBook();
+                    break;
+                case 5:
+                    updateBook();
+                    break;
+                case 6:
+                    deleteBook();
+                    break;
+                case 7:
+                	System.out.println("Exit!!");
+                	break;
+            }
+        } while (choice != 7);
+    }
+}
