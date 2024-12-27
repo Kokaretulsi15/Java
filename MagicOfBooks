@@ -14,7 +14,7 @@ class User {
         this.userId = userId;
         this.emailId = emailId;
         this.password = password;
-        this.newBooks = new Book[0];    // Initialize empty arrays
+        this.newBooks = new Book[0];    
         this.favourite = new Book[0];
         this.completed = new Book[0];
     }
